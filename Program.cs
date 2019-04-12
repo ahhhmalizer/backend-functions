@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net.Http;
+using System.IO;
 using System.Threading;
 using Newtonsoft.Json;
 
@@ -8,9 +9,10 @@ namespace HackathonDD {
     class Program {
         static void Main (string[] args) {
             var apiUrl = "https://api.videoindexer.ai";
-            var accountId = "436182c5-6687-44e5-aaaf-57142645bb7e";
+            var accountId = "095a3160-6af8-4fc6-8d36-2879b7e5221d";
+            // "436182c5-6687-44e5-aaaf-57142645bb7e";
             var location = "trial";
-            var apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBY2NvdW50SWQiOiI0MzYxODJjNS02Njg3LTQ0ZTUtYWFhZi01NzE0MjY0NWJiN2UiLCJBbGxvd0VkaXQiOiJGYWxzZSIsIkV4dGVybmFsVXNlcklkIjoiQjQyQ0RFNDcwMUI2NDU1MjkzMkVEMUQ1MzBERjE3M0MiLCJVc2VyVHlwZSI6Ik1pY3Jvc29mdENvcnBBYWQiLCJpc3MiOiJodHRwczovL3d3dy52aWRlb2luZGV4ZXIuYWkvIiwiYXVkIjoiaHR0cHM6Ly93d3cudmlkZW9pbmRleGVyLmFpLyIsImV4cCI6MTU1NTA5NjAxMywibmJmIjoxNTU1MDkyMTEzfQ.bDXCemII5ghl4ig7Y-_-6TkjMdKhoTzEoVeDKzF7hv0";
+            var apiKey ="01c3fe9e9c134addb685912d1c771efc";
 
             System.Net.ServicePointManager.SecurityProtocol = System.Net.ServicePointManager.SecurityProtocol | System.Net.SecurityProtocolType.Tls12;
 
@@ -28,16 +30,16 @@ namespace HackathonDD {
 
             // upload a video
             var content = new MultipartFormDataContent ();
-            Debug.WriteLine ("Uploading...");
+            Console.WriteLine ("Uploading...");
             // get the video from URL
-            var videoUrl = "https://www.youtube.com/watch?v=7KKcbcXFNgM"; // replace with the video URL
+            var videoUrl = "https://www.w3schools.com/html/mov_bbb.mp4"; // replace with the video URL
 
             // as an alternative to specifying video URL, you can upload a file.
             // remove the videoUrl parameter from the query string below and add the following lines:
-            //FileStream video =File.OpenRead(Globals.VIDEOFILE_PATH);
-            //byte[] buffer =newbyte[video.Length];
-            //video.Read(buffer, 0, buffer.Length);
-            //content.Add(newByteArrayContent(buffer));
+            // FileStream video = File.OpenRead(@"C:\Users\Mihail Fomin\Desktop\Ahhhmalizer.Backend\data\own.mp4");
+            // byte[] buffer= new byte[video.Length];
+            // video.Read(buffer, 0, buffer.Length);
+            // content.Add(new ByteArrayContent(buffer));
 
             var uploadRequestResult = client.PostAsync ($"{apiUrl}/{location}/Accounts/{accountId}/Videos?accessToken={accountAccessToken}&name=some_name&description=some_description&privacy=private&partition=some_partition&videoUrl={videoUrl}", content).Result;
             var uploadResult = uploadRequestResult.Content.ReadAsStringAsync ().Result;
@@ -63,15 +65,15 @@ namespace HackathonDD {
 
                 var processingState = JsonConvert.DeserializeObject<dynamic> (videoGetIndexResult) ["state"];
 
-                Debug.WriteLine ("");
-                Debug.WriteLine ("State:");
-                Debug.WriteLine (processingState);
+                Console.WriteLine ("");
+                Console.WriteLine ("State:");
+                Console.WriteLine (processingState);
 
                 // job is finished
                 if (processingState != "Uploaded" && processingState != "Processing") {
-                    Debug.WriteLine ("");
-                    Debug.WriteLine ("Full JSON:");
-                    Debug.WriteLine (videoGetIndexResult);
+                    Console.WriteLine ("");
+                    Console.WriteLine ("Full JSON:");
+                    Console.WriteLine (videoGetIndexResult);
                     break;
                 }
             }
@@ -79,22 +81,22 @@ namespace HackathonDD {
             // search for the video
             var searchRequestResult = client.GetAsync ($"{apiUrl}/{location}/Accounts/{accountId}/Videos/Search?accessToken={accountAccessToken}&id={videoId}").Result;
             var searchResult = searchRequestResult.Content.ReadAsStringAsync ().Result;
-            Debug.WriteLine ("");
-            Debug.WriteLine ("Search:");
-            Debug.WriteLine (searchResult);
+            Console.WriteLine ("");
+            Console.WriteLine ("Search:");
+            Console.WriteLine (searchResult);
 
             // get insights widget url
             var insightsWidgetRequestResult = client.GetAsync ($"{apiUrl}/{location}/Accounts/{accountId}/Videos/{videoId}/InsightsWidget?accessToken={videoAccessToken}&widgetType=Keywords&allowEdit=true").Result;
             var insightsWidgetLink = insightsWidgetRequestResult.Headers.Location;
-            Debug.WriteLine ("Insights Widget url:");
-            Debug.WriteLine (insightsWidgetLink);
+            Console.WriteLine ("Insights Widget url:");
+            Console.WriteLine (insightsWidgetLink);
 
             // get player widget url
             var playerWidgetRequestResult = client.GetAsync ($"{apiUrl}/{location}/Accounts/{accountId}/Videos/{videoId}/PlayerWidget?accessToken={videoAccessToken}").Result;
             var playerWidgetLink = playerWidgetRequestResult.Headers.Location;
-            Debug.WriteLine ("");
-            Debug.WriteLine ("Player Widget url:");
-            Debug.WriteLine (playerWidgetLink);
+            Console.WriteLine ("");
+            Console.WriteLine ("Player Widget url:");
+            Console.WriteLine (playerWidgetLink);
         }
     }
 }

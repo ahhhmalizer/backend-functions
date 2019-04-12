@@ -735,23 +735,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\aewt\\.nuget\\packages\\": {},
+    "C:\\Users\\Mihail Fomin\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\aewt\\Desktop\\HackathonDD\\HackathonDD.csproj",
+      "projectUniqueName": "C:\\Users\\Mihail Fomin\\Desktop\\Ahhhmalizer.Backend\\HackathonDD.csproj",
       "projectName": "HackathonDD",
-      "projectPath": "C:\\Users\\aewt\\Desktop\\HackathonDD\\HackathonDD.csproj",
-      "packagesPath": "C:\\Users\\aewt\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\aewt\\Desktop\\HackathonDD\\obj\\",
+      "projectPath": "C:\\Users\\Mihail Fomin\\Desktop\\Ahhhmalizer.Backend\\HackathonDD.csproj",
+      "packagesPath": "C:\\Users\\Mihail Fomin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Mihail Fomin\\Desktop\\Ahhhmalizer.Backend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\aewt\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Mihail Fomin\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.2"

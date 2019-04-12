@@ -1,18 +1,29 @@
-﻿using System;
+using System;
 using System.Diagnostics;
-using System.Net.Http;
 using System.IO;
+using System.IO;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json;
 
-namespace HackathonDD {
-    class Program {
-        static void Main (string[] args) {
+namespace Company.Function {
+    public static class HttpTriggerCSharp {
+        [FunctionName ("HttpTriggerCSharp")]
+        public static async Task<IActionResult> Run (
+            [HttpTrigger (AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            ILogger log) {
             var apiUrl = "https://api.videoindexer.ai";
             var accountId = "095a3160-6af8-4fc6-8d36-2879b7e5221d";
             // "436182c5-6687-44e5-aaaf-57142645bb7e";
             var location = "trial";
-            var apiKey ="01c3fe9e9c134addb685912d1c771efc";
+            var apiKey = "01c3fe9e9c134addb685912d1c771efc";
 
             System.Net.ServicePointManager.SecurityProtocol = System.Net.ServicePointManager.SecurityProtocol | System.Net.SecurityProtocolType.Tls12;
 
@@ -56,12 +67,14 @@ namespace HackathonDD {
 
             client.DefaultRequestHeaders.Remove ("Ocp-Apim-Subscription-Key");
 
+            var videoGetIndexResult = "";
+
             // wait for the video index to finish
             while (true) {
                 Thread.Sleep (10000);
 
                 var videoGetIndexRequestResult = client.GetAsync ($"{apiUrl}/{location}/Accounts/{accountId}/Videos/{videoId}/Index?accessToken={videoAccessToken}&language=English").Result;
-                var videoGetIndexResult = videoGetIndexRequestResult.Content.ReadAsStringAsync ().Result;
+                videoGetIndexResult = videoGetIndexRequestResult.Content.ReadAsStringAsync ().Result;
 
                 var processingState = JsonConvert.DeserializeObject<dynamic> (videoGetIndexResult) ["state"];
 
@@ -97,6 +110,28 @@ namespace HackathonDD {
             Console.WriteLine ("");
             Console.WriteLine ("Player Widget url:");
             Console.WriteLine (playerWidgetLink);
+
+            // log.LogInformation ("C# HTTP trigger function processed a request.");
+
+            // string name = req.Query["name"];
+
+            // string requestBody = await new StreamReader (req.Body).ReadToEndAsync ();
+            // dynamic data = JsonConvert.DeserializeObject (requestBody);
+            // name = name ?? data?.name;
+
+            // return name != null ?
+            //     (ActionResult) new OkObjectResult ($"Hello, {name}") :
+            //     new BadRequestObjectResult ("Please pass a name on the query string or in the request body");
+
+            // job is finished
+            // if (processingState != "Uploaded" && processingState != "Processing") {
+            //     Console.WriteLine ("");
+            //     Console.WriteLine ("Full JSON:");
+            //     Console.WriteLine (videoGetIndexResult);
+
+            // }
+            return new OkObjectResult (videoGetIndexResult);
+
         }
     }
 }

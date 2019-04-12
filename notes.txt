@@ -1,8 +1,0 @@
-relevant json data:
-
-1) sentiment analysis
-sentiments
-emotions
-
-2) text
-transcript

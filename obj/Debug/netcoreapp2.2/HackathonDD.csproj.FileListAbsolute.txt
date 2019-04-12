@@ -1,0 +1,11 @@
+C:\Users\aewt\Desktop\HackathonDD\obj\Debug\netcoreapp2.2\HackathonDD.csprojAssemblyReference.cache
+C:\Users\aewt\Desktop\HackathonDD\obj\Debug\netcoreapp2.2\HackathonDD.csproj.CoreCompileInputs.cache
+C:\Users\aewt\Desktop\HackathonDD\obj\Debug\netcoreapp2.2\HackathonDD.AssemblyInfoInputs.cache
+C:\Users\aewt\Desktop\HackathonDD\obj\Debug\netcoreapp2.2\HackathonDD.AssemblyInfo.cs
+C:\Users\aewt\Desktop\HackathonDD\bin\Debug\netcoreapp2.2\HackathonDD.deps.json
+C:\Users\aewt\Desktop\HackathonDD\bin\Debug\netcoreapp2.2\HackathonDD.runtimeconfig.json
+C:\Users\aewt\Desktop\HackathonDD\bin\Debug\netcoreapp2.2\HackathonDD.runtimeconfig.dev.json
+C:\Users\aewt\Desktop\HackathonDD\bin\Debug\netcoreapp2.2\HackathonDD.dll
+C:\Users\aewt\Desktop\HackathonDD\bin\Debug\netcoreapp2.2\HackathonDD.pdb
+C:\Users\aewt\Desktop\HackathonDD\obj\Debug\netcoreapp2.2\HackathonDD.dll
+C:\Users\aewt\Desktop\HackathonDD\obj\Debug\netcoreapp2.2\HackathonDD.pdb

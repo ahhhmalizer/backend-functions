@@ -1,7 +1,10 @@
 using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,9 +15,12 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Company.Function {
     public static class HttpTriggerCSharp {
+
         [FunctionName ("HttpTriggerCSharp")]
         public static async Task<IActionResult> Run (
             [HttpTrigger (AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -43,16 +49,16 @@ namespace Company.Function {
             var content = new MultipartFormDataContent ();
             Console.WriteLine ("Uploading...");
             // get the video from URL
-            var videoUrl = "https://www.w3schools.com/html/mov_bbb.mp4"; // replace with the video URL
+            // var videoUrl = "https://www.w3schools.com/html/mov_bbb.mp4"; // replace with the video URL
 
             // as an alternative to specifying video URL, you can upload a file.
             // remove the videoUrl parameter from the query string below and add the following lines:
-            // FileStream video = File.OpenRead(@"C:\Users\Mihail Fomin\Desktop\Ahhhmalizer.Backend\data\own.mp4");
-            // byte[] buffer= new byte[video.Length];
-            // video.Read(buffer, 0, buffer.Length);
-            // content.Add(new ByteArrayContent(buffer));
+            FileStream video = File.OpenRead (@"C:/Users/aewt/Downloads/t_video5298516770129183463.mp4");
+            byte[] buffer = new byte[video.Length];
+            video.Read (buffer, 0, buffer.Length);
+            content.Add (new ByteArrayContent (buffer));
 
-            var uploadRequestResult = client.PostAsync ($"{apiUrl}/{location}/Accounts/{accountId}/Videos?accessToken={accountAccessToken}&name=some_name&description=some_description&privacy=private&partition=some_partition&videoUrl={videoUrl}", content).Result;
+            var uploadRequestResult = client.PostAsync ($"{apiUrl}/{location}/Accounts/{accountId}/Videos?accessToken={accountAccessToken}&name=some_name&description=some_description&privacy=private&partition=some_partition", content).Result;
             var uploadResult = uploadRequestResult.Content.ReadAsStringAsync ().Result;
 
             // get the video id from the upload result
@@ -85,8 +91,8 @@ namespace Company.Function {
                 // job is finished
                 if (processingState != "Uploaded" && processingState != "Processing") {
                     Console.WriteLine ("");
-                    Console.WriteLine ("Full JSON:");
-                    Console.WriteLine (videoGetIndexResult);
+                    //Console.WriteLine ("Full JSON:");
+                    //Console.WriteLine (videoGetIndexResult);
                     break;
                 }
             }
@@ -130,8 +136,26 @@ namespace Company.Function {
             //     Console.WriteLine (videoGetIndexResult);
 
             // }
-            return new OkObjectResult (videoGetIndexResult);
 
+            dynamic items = JObject.Parse (videoGetIndexResult);
+
+            dynamic values = new JArray ();
+            foreach (var item in items.summarizedInsights.sentiments) {
+                dynamic attr = new JObject ();
+                attr.name = item.sentimentKey;
+                attr.value = item.seenDurationRatio;
+                values.Add (attr);
+            }
+
+            dynamic obj = new JObject ();
+            obj.category = "sentiments";
+            obj.values = values;
+
+            // dynamic sentiments = JObject.Parse (items.transcript.summarizedInsights);
+            // string obj = @"{'sentiments':" + sentiments + "}";
+            // Console.WriteLine (obj);
+
+            return new OkObjectResult (obj);
         }
     }
 }
